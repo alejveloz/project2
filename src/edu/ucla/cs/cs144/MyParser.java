@@ -211,16 +211,19 @@ class MyParser {
     {
 		// Build most of Item object
     	Item item = new Item();
-		// Create a new Item object
-		// Grab the "itemID" and set it
-		// Grab the "name" and set it
-    	// Grab the "buyPrice" and set it
-    	// Grab the "firstMinimumBid" and set it
-		// Grab the "numBids" and set it
-    	// Grab the "currentBidAmount" and set it
-    	// Grab the "started" and set it
-    	// Grab the "ends" and set it
-    	// Grab the "description" and set it
+    	item.itemID = Integer.parseInt(itemElement.getAttribute("ItemID"));
+    	item.name = getElementText(getElementByTagNameNR(itemElement, "Name"));
+    	item.firstMinimumBid = getElementText(getElementByTagNameNR(itemElement, "First_Bid"));
+    	item.numBids = Integer.parseInt(getElementText(getElementByTagNameNR(itemElement, "Number_of_Bids")));
+    	item.currentBidAmount = getElementText(getElementByTagNameNR(itemElement, "Currently"));
+    	item.started = getElementText(getElementByTagNameNR(itemElement, "Started"));
+    	item.ends = getElementText(getElementByTagNameNR(itemElement, "Ends"));
+    	item.description = getElementText(getElementByTagNameNR(itemElement, "Description"));
+    	Element buyPriceElement = getElementByTagNameNR(itemElement, "Buy_Price");
+    	if(buyPriceElement != null)
+    	{
+    		item.buyPrice = strip(getElementText(buyPriceElement));
+    	}
 			
 		// Build User object for seller	
     	// Create a User by parsing the "Seller" element

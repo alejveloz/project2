@@ -5,13 +5,13 @@ public class Item {
 	
 	int itemID;
 	String name;
-	int buyPrice;
-	int firstMinimumBid;
+	String buyPrice; // Consider converting to different representation 
+	String firstMinimumBid; // Consider converting to different representation 
 	String started;
 	String ends;
 	String description;
 	int numBids;
-	int currentBidAmount;
+	String currentBidAmount; // Consider converting to different representation 
 	int userID;  //for database purposes
 	int categoryIDs[]; //for database purposes
 	
@@ -19,13 +19,13 @@ public class Item {
 	{
 		itemID = -1;
 		name = null;
-		buyPrice = -1;
-		firstMinimumBid = -1;
+		buyPrice = null;
+		firstMinimumBid = null;
 		started = null;
 		ends = null;
 		description = null;
 		numBids = -1;
-		currentBidAmount = -1;
+		currentBidAmount = null;
 		userID = -1;
 	}
 }
