@@ -281,21 +281,28 @@ class MyParser {
     	return user;
     }
     
-    static ArrayList<Bid> parseBids(Element[] categoryElements)
+    static ArrayList<Bid> parseBids(Element[] bidElements)
     {
     	ArrayList<Bid> bids = new ArrayList<Bid>();
     	
     	// For each bid element, process
-    	// Parse the bid for User info and Bid info
-    	parseBid();
-    	// Add the resulting Bid to the bids[] array
+    	for(int i=0; i<bidElements.length; i++)
+    	{
+    		// Parse the bid for User info and Bid info
+    		Bid bid = parseBid(bidElements[i]);
+    		
+    		// Add the resulting Bid to the bids[] array
+    		bids.add(bid);
+    	}
     	
     	return bids;
     }
     
-    static void parseBid()
+    static Bid parseBid(Element bidElement)
     {
     	// Build most of the Bid object
+    	Bid bid = new Bid();
+    	
     	// Grab the "time" and set it
     	// Grab the "amount" and set it
     	
@@ -308,6 +315,8 @@ class MyParser {
     			
     	// Set the remaining fields of the Bid object
     	// Set the Bid item's "userID"
+    	
+    	return bid;
     }
     
     static User parseBidder()
