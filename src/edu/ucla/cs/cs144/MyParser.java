@@ -63,8 +63,8 @@ class MyParser {
 	"Notation",
     };
 
-    static ArrayList<String> writtenUserIDs;
-    static ArrayList<String> writtenCategoryNames;
+    static HashSet<String> writtenUserIDs;
+    static HashSet<String> writtenCategoryNames;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -420,8 +420,8 @@ class MyParser {
         }
         
         /* Initialize containers */
-        writtenUserIDs = new ArrayList<String>();
-        writtenCategoryNames = new ArrayList<String>();
+        writtenUserIDs = new HashSet<String>();
+        writtenCategoryNames = new HashSet<String>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
