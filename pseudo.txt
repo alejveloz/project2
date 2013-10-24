@@ -1,9 +1,0 @@
-Category
-	Covered by CategoryID array in item
-	Will have hash maps of item -> category, and category -> item in Parse.class
-
-Item2Seller
-	Covered by USERID field in Item
-
-ItemCategory
-	Covered by category[] array
