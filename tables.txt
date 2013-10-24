@@ -1,0 +1,71 @@
+Tables
+	
+User
+	UserID [int]
+	Rating [int?]
+	Location [varchar]
+	Country [varchar]
+	
+	Key: UserID
+	Dependencies:
+		UserID -> Rating, Location, Country
+		Location -> Country 
+			(this is technically a dependency, but I think we can ignore it,
+			we don't wanna break it into location tables)
+	
+	
+Item
+	ItemID [int]
+	Name [varchar]
+	Buy Price [money int]
+	First Bid Minimum [money int]
+	Started [date]
+	Ends [date]
+	Description [varchar]
+	Number of Bids [money int] // Keep in favor of simpler database queries
+	Current bid amount [money int] // Keep in favor of simpler database queries
+	
+	Key: ItemID
+	Dependencies:
+		ItemID -> Name, Buy Price, First Bid Minimum, Started, Ends, Description, Number of Bids, Current Bid ID
+
+
+Category
+	CategoryID [int] // Added for key efficiency. int > varchar (accord. piazza Q)
+	Name [varchar]
+	
+	Key: CategoryID
+	Dependencies:
+		CategoryID -> Name
+	
+
+ItemSeller
+	ItemID [int]
+	UserID [int]
+	
+	Key: ItemID
+	Dependencies:
+		ItemID -> UserID
+
+
+ItemCategory
+	ItemID [int]
+	CategoryID [int]
+	
+	Key: ItemId, CategoryID
+	Dependencies
+		None
+
+
+Bid
+	ItemID [int]
+	Time [date]
+	UserID [int]
+	Amount [money int]
+	
+	Key: ItemID, Time
+	Dependencies:
+		ItemID, Time -> UserID, Amount
+		UserID, Time -> ItemID, Amount
+		[piazza answers indicate both can be keys, idk which to use]
+
