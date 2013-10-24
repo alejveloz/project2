@@ -279,19 +279,24 @@ class MyParser {
     	
     	// Process Bidder object for User
     	// Create a user from the Bidder element
-    	parseBidder();
+    	User user = parseBidder();
+    	
     	// Add the user and account for conflicts
-    	addUser();
+    	addUser(user);
     			
     	// Set the remaining fields of the Bid object
     	// Set the Bid item's "userID"
     }
     
-    static void parseBidder()
+    static User parseBidder()
     {
     	// Create a User object
+    	User user = new User();
+    	
     	// Grab the "userID" and set it
     	// Grab the "rating" and set it
+    	
+    	return user;
     }
     
     static void getCategoryIDs()
@@ -318,18 +323,34 @@ class MyParser {
     static void addUser(User user)
     {
     	// If the user doesn't exist in userMap
+    	if(!userMap.containsKey(user.userID))
+    	{
     		// Add them
+    		userMap.put(user.userID, user);
+    	}
     	// If the user does exist in userMap
+    	else
+    	{
     		// Grab the existing User
+    		User existingUser = userMap.get(user.userID);
+    		
     		// Merge the two Users to create a new user
-    		mergeUsers();
+    		User newUser = mergeUsers(existingUser, user);
+    		
+    		// Add the new users
+    		userMap.put(newUser.userID, newUser);
+    	}
+    		
     }
     
-    static void mergeUsers()
+    static User mergeUsers(User user1, User user2)
     {
+    	User newUser = new User();
+    	
     	// Compare field by field
     	// Update first User to gain any missing attributes
     	// Print any conflicts (should not occur)
+    	return newUser;
     }
     
     public static void main (String[] args) {
