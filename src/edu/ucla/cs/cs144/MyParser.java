@@ -64,7 +64,7 @@ class MyParser {
     };
     
     static LinkedHashMap<Integer, Item> itemMap;
-    static LinkedHashMap<Integer, User> userMap;
+    static LinkedHashMap<String, User> userMap;
     static LinkedHashMap<Integer, String> categoryIDMap;
     static LinkedHashMap<String, Integer> categoryStringMap;
     static ArrayList<Bid> bidsArray;
@@ -266,12 +266,16 @@ class MyParser {
     	return item;
     }
     
-    static User parseSeller(Element seller)
+    static User parseSeller(Element sellerElement)
     {
-    	User user = new User();
     	// Create a User object
+    	User user = new User();
+    	
     	// Grab the "userID" and set it
+    	user.userID = sellerElement.getAttribute("UserID");
+    	
     	// Grab the "rating" and set it
+    	user.rating = Integer.parseInt(sellerElement.getAttribute("Rating"));
  
     	// Return the User object
     	return user;
@@ -400,7 +404,7 @@ class MyParser {
         
         /* Initialize containers */
         itemMap = new LinkedHashMap<Integer, Item>();
-        userMap = new LinkedHashMap<Integer, User>();
+        userMap = new LinkedHashMap<String, User>();
         categoryIDMap = new LinkedHashMap<Integer, String>();
         categoryStringMap = new LinkedHashMap<String, Integer>();
         bidsArray = new ArrayList<Bid>();

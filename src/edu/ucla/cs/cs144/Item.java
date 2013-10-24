@@ -12,7 +12,7 @@ public class Item {
 	String description;
 	int numBids;
 	String currentBidAmount; // Consider converting to different representation 
-	int userID;  //for database purposes
+	String userID;  //for database purposes
 	int categoryIDs[]; //for database purposes
 	
 	Item()
@@ -26,6 +26,6 @@ public class Item {
 		description = null;
 		numBids = -1;
 		currentBidAmount = null;
-		userID = -1;
+		userID = null;
 	}
 }
