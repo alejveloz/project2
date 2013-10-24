@@ -67,7 +67,7 @@ class MyParser {
     static LinkedHashMap<Integer, User> userMap;
     static LinkedHashMap<Integer, String> categoryIDMap;
     static LinkedHashMap<String, Integer> categoryStringMap;
-    static ArrayList<Bid> bids;
+    static ArrayList<Bid> bidsArray;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -227,6 +227,7 @@ class MyParser {
 			
 		// Build User object for seller	
     	User user = parseSeller(getElementByTagNameNR(itemElement, "Seller"));
+    	item.userID = user.userID;
     	String location = getElementText(getElementByTagNameNR(itemElement, "Location"));
     	String country = getElementText(getElementByTagNameNR(itemElement, "Country"));
     	user.location = location;
@@ -235,19 +236,32 @@ class MyParser {
     	// Add the user and account for conflicts
     	addUser(user);
 		
-		// Build Categories array
     	// Create an array of category strings by parsing the "Category"s
-    	// Get an array of the equivalent category ID's
-		getCategoryIDs();
+    	Element[] categoryElements = getElementsByTagNameNR(itemElement, "Category");
+    	if(categoryElements.length > 0)
+    	{
+    		// Get an array of the equivalent category ID's
+    		int categoryIDs[] = getCategoryIDs(categoryElements);
+    		item.categoryIDs = categoryIDs;
+    	}
 		
 		// Process Bids
     	// Hand off the bids to be parsed for Bid and User info
-    	parseBids();
-    	// For each big, update it's ItemID
-		
-		// Set the remaining fields of the Item object
-    	// Grab the User's ID and set item's "userID"
-    	// Set the item's category array
+    	Element bidsElement = getElementByTagNameNR(itemElement, "Bids");
+    	Element[] bidElements = getElementsByTagNameNR(bidsElement, "Bid");
+    	if(bidElements.length > 0)
+    	{
+    		ArrayList<Bid> bids = parseBids(bidElements);
+    		
+    		// For each big, update it's ItemID
+    		for(int i=0; i < bids.size(); i++)
+    		{
+    			bids.get(i).itemID = item.itemID;
+    		}
+    		
+    		// Add the found bids to the global bid ArrayList
+    		bidsArray.addAll(bids);
+    	}
     	
     	return item;
     }
@@ -263,12 +277,16 @@ class MyParser {
     	return user;
     }
     
-    static void parseBids()
+    static ArrayList<Bid> parseBids(Element[] categoryElements)
     {
+    	ArrayList<Bid> bids = new ArrayList<Bid>();
+    	
     	// For each bid element, process
     	// Parse the bid for User info and Bid info
     	parseBid();
     	// Add the resulting Bid to the bids[] array
+    	
+    	return bids;
     }
     
     static void parseBid()
@@ -299,9 +317,11 @@ class MyParser {
     	return user;
     }
     
-    static void getCategoryIDs()
+    static int[] getCategoryIDs(Element[] categoryElements)
     {
     	// Create a return array
+    	int categoryIDs[] = {0, 1, 2, 3};
+    	
     	// Process each Category string
     		// Check for category in string->id map
     		// If it exists
@@ -310,7 +330,9 @@ class MyParser {
     			// Create a new id (increment) 
     			// Add  pair to string->id, id->string maps
     			// Add new id to return array
+    	
     	// Return the array
+    	return categoryIDs;
     }
     
     static void addItem(Item item)
@@ -381,7 +403,7 @@ class MyParser {
         userMap = new LinkedHashMap<Integer, User>();
         categoryIDMap = new LinkedHashMap<Integer, String>();
         categoryStringMap = new LinkedHashMap<String, Integer>();
-        bids = new ArrayList<Bid>();
+        bidsArray = new ArrayList<Bid>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
