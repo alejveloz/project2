@@ -65,6 +65,7 @@ class MyParser {
 
     static HashSet<String> writtenUserIDs;
     static HashSet<String> writtenCategoryNames;
+    static LinkedHashMap<String, User> incompleteUsers;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -184,6 +185,9 @@ class MyParser {
          * file. Use doc.getDocumentElement() to get the root Element. */
         System.out.println("Successfully parsed - " + xmlFile);
         
+
+        /**************************************************************/
+        
         
         // Get all Item elements
         Element documentRoot = doc.getDocumentElement();
@@ -199,7 +203,11 @@ class MyParser {
 			writeItem(currentItem);
         }
         
-        /**************************************************************/
+        // Write any remaining incomplete users
+        for (Map.Entry<String, User> entry : incompleteUsers.entrySet())
+		{
+        	writeIncompleteUser(entry.getValue());
+        }
         
     }
     
@@ -230,11 +238,8 @@ class MyParser {
     	user.location = location;
     	user.country = country;
     	
-    	// Write the user
-    	if(!writtenUserIDs.contains(user.userID))
-    	{
-    		writeUser(user);
-    	}
+    	// Write the user if they're complete and haven't been written
+    	attemptWriteUser(user);
     	
     	// Write the relationship between the user and the item
     	writeItemSeller(item.itemID, user.userID);
@@ -339,7 +344,6 @@ class MyParser {
     	
     	// Grab the "userID" and set it
     	user.userID = bidderElement.getAttribute("UserID");
-    	System.out.println(user.userID);
     	
     	// Grab the "rating" and set it
     	user.rating = Integer.parseInt(bidderElement.getAttribute("Rating"));
@@ -362,10 +366,44 @@ class MyParser {
     	return;
     }
     
+    static void attemptWriteUser(User user)
+    {
+    	// If the user has not been written, consider writing
+    	if(!writtenUserIDs.contains(user.userID))
+    	{
+    		// If the user info is complete, check if previously incomplete, write
+    		if(user.isComplete())
+    		{
+    			if(incompleteUsers.containsKey(user.userID))
+    				incompleteUsers.remove(user.userID);
+    			
+    			writeUser(user);
+    		}
+    		// Otherwise, save user as incomplete (if not duplicate)
+    		else
+    		{
+    			if(!incompleteUsers.containsKey(user.userID))
+    				incompleteUsers.put(user.userID, user);	
+    			
+    			// TODO: If incompleteUser already exists, consider the possibility that the 
+    			//       current incomplete user may have more info than the previously saved one
+    		}
+    	}
+    }
+    
     static void writeUser(User user)
     {
     	// TODO:
     	
+    	writtenUserIDs.add(user.userID);
+    	return;
+    }
+    
+    static void writeIncompleteUser(User user)
+    {
+    	// TODO:
+    	
+    	incompleteUsers.remove(user.userID);
     	writtenUserIDs.add(user.userID);
     	return;
     }
@@ -422,6 +460,7 @@ class MyParser {
         /* Initialize containers */
         writtenUserIDs = new HashSet<String>();
         writtenCategoryNames = new HashSet<String>();
+        incompleteUsers = new LinkedHashMap<String, User>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {

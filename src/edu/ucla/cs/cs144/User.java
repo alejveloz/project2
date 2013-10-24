@@ -15,4 +15,9 @@ public class User {
 		location = null;
 		country = null;
 	}
+	
+	public boolean isComplete()
+	{
+		return (userID != null) && (rating != -1) && (location != null) && (country != null);
+	}
 }
