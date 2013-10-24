@@ -213,9 +213,9 @@ class MyParser {
     	Item item = new Item();
     	item.itemID = Integer.parseInt(itemElement.getAttribute("ItemID"));
     	item.name = getElementText(getElementByTagNameNR(itemElement, "Name"));
-    	item.firstMinimumBid = getElementText(getElementByTagNameNR(itemElement, "First_Bid"));
+    	item.firstMinimumBid = strip(getElementText(getElementByTagNameNR(itemElement, "First_Bid")));
     	item.numBids = Integer.parseInt(getElementText(getElementByTagNameNR(itemElement, "Number_of_Bids")));
-    	item.currentBidAmount = getElementText(getElementByTagNameNR(itemElement, "Currently"));
+    	item.currentBidAmount = strip(getElementText(getElementByTagNameNR(itemElement, "Currently")));
     	item.started = getElementText(getElementByTagNameNR(itemElement, "Started"));
     	item.ends = getElementText(getElementByTagNameNR(itemElement, "Ends"));
     	item.description = getElementText(getElementByTagNameNR(itemElement, "Description"));
@@ -304,11 +304,16 @@ class MyParser {
     	Bid bid = new Bid();
     	
     	// Grab the "time" and set it
+    	bid.time = getElementText(getElementByTagNameNR(bidElement, "Time"));
+    	
     	// Grab the "amount" and set it
+    	bid.amount = strip(getElementText(getElementByTagNameNR(bidElement, "Amount")));
     	
     	// Process Bidder object for User
+    	Element bidderElement = getElementByTagNameNR(bidElement, "Bidder");
+    	
     	// Create a user from the Bidder element
-    	User user = parseBidder();
+    	User user = parseBidder(bidderElement);
     	
     	// Add the user and account for conflicts
     	addUser(user);
@@ -319,14 +324,21 @@ class MyParser {
     	return bid;
     }
     
-    static User parseBidder()
+    static User parseBidder(Element bidderElement)
     {
     	// Create a User object
     	User user = new User();
     	
     	// Grab the "userID" and set it
-    	// Grab the "rating" and set it
+    	user.userID = bidderElement.getAttribute("UserID");
     	
+    	// Grab the "rating" and set it
+    	user.rating = Integer.parseInt(bidderElement.getAttribute("Rating"));
+ 
+    	user.location = getElementText(getElementByTagNameNR(bidderElement, "Location"));
+    	user.country = getElementText(getElementByTagNameNR(bidderElement, "Country"));
+    	
+    	// Return the User object
     	return user;
     }
     

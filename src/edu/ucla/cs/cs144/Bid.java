@@ -5,14 +5,14 @@ public class Bid {
 
 	int itemID;
 	String time;
-	int userID;
-	int amount;
+	String userID;
+	String amount;
 	
 	Bid()
 	{
 		itemID = -1;
 		time = null;
-		userID = -1;
-		amount = -1;
+		userID = null;
+		amount = null;
 	}
 }
