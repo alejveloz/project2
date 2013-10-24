@@ -63,8 +63,8 @@ class MyParser {
 	"Notation",
     };
 
-    static ArrayList<String> userIDArray;
-    static ArrayList<String> categoryNameArray;
+    static ArrayList<String> writtenUserIDs;
+    static ArrayList<String> writtenCategoryNames;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -231,7 +231,7 @@ class MyParser {
     	user.country = country;
     	
     	// Write the user
-    	if(!userIDArray.contains(user.userID))
+    	if(!writtenUserIDs.contains(user.userID))
     	{
     		writeUser(user);
     	}
@@ -246,7 +246,7 @@ class MyParser {
     		String categoryName = getElementText(categoryElements[i]);
     		
     		// Write this category if it doesn't exist yet
-    		if(!categoryNameArray.contains(categoryName))
+    		if(!writtenCategoryNames.contains(categoryName))
     		{
     			writeCategory(categoryName);
     		}
@@ -324,7 +324,7 @@ class MyParser {
     	User user = parseBidder(bidderElement);
     	
     	// Add the user and account for conflicts
-    	if(!userIDArray.contains(user.userID))
+    	if(!writtenUserIDs.contains(user.userID))
     	{
     		writeUser(user);
     	}
@@ -359,6 +359,8 @@ class MyParser {
     static void writeUser(User user)
     {
     	// TODO:
+    	
+    	writtenUserIDs.add(user.userID);
     	return;
     }
     
@@ -377,6 +379,8 @@ class MyParser {
     static void writeCategory(String categoryName)
     {
     	// TODO:
+    	
+    	writtenCategoryNames.add(categoryName);
     	return;
     }
     
@@ -410,8 +414,8 @@ class MyParser {
         }
         
         /* Initialize containers */
-        userIDArray = new ArrayList<String>();
-        categoryNameArray = new ArrayList<String>();
+        writtenUserIDs = new ArrayList<String>();
+        writtenCategoryNames = new ArrayList<String>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
