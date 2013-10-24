@@ -226,12 +226,14 @@ class MyParser {
     	}
 			
 		// Build User object for seller	
-    	// Create a User by parsing the "Seller" element
-    	parseSeller();
-    	// Grab Location and set the user's "location"
-    	// Grab Country and set the user's "country"
+    	User user = parseSeller(getElementByTagNameNR(itemElement, "Seller"));
+    	String location = getElementText(getElementByTagNameNR(itemElement, "Location"));
+    	String country = getElementText(getElementByTagNameNR(itemElement, "Country"));
+    	user.location = location;
+    	user.country = country;
+    	
     	// Add the user and account for conflicts
-    	addUser();
+    	addUser(user);
 		
 		// Build Categories array
     	// Create an array of category strings by parsing the "Category"s
@@ -250,13 +252,15 @@ class MyParser {
     	return item;
     }
     
-    static void parseSeller()
+    static User parseSeller(Element seller)
     {
+    	User user = new User();
     	// Create a User object
     	// Grab the "userID" and set it
     	// Grab the "rating" and set it
  
     	// Return the User object
+    	return user;
     }
     
     static void parseBids()
@@ -311,7 +315,7 @@ class MyParser {
     		itemMap.put(item.itemID, item);
     }
     
-    static void addUser()
+    static void addUser(User user)
     {
     	// If the user doesn't exist in userMap
     		// Add them
