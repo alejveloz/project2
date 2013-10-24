@@ -186,23 +186,31 @@ class MyParser {
         /* At this point 'doc' contains a DOM representation of an 'Items' XML
          * file. Use doc.getDocumentElement() to get the root Element. */
         System.out.println("Successfully parsed - " + xmlFile);
-
+        
         
         // Get all Item elements
+        Element documentRoot = doc.getDocumentElement();
+        Element[] items = getElementsByTagNameNR(documentRoot, "Item");
+
 		// Process each element
+        for(int i = 0; i < items.length; i++)
+        {
 			// Create an Item by parsing the the "Item" element
-			parseItem();
+			Item currentItem = parseItem(items[i]);
+			
 			// Add the resulting item to items[]
-			addItem();
+			addItem(currentItem);
+        }
         
         /**************************************************************/
         
     }
     
   
-    static void parseItem()
+    static Item parseItem(Element itemElement)
     {
 		// Build most of Item object
+    	Item item = new Item();
 		// Create a new Item object
 		// Grab the "itemID" and set it
 		// Grab the "name" and set it
@@ -235,6 +243,8 @@ class MyParser {
 		// Set the remaining fields of the Item object
     	// Grab the User's ID and set item's "userID"
     	// Set the item's category array
+    	
+    	return item;
     }
     
     static void parseSeller()
@@ -291,7 +301,7 @@ class MyParser {
     	// Return the array
     }
     
-    static void addItem()
+    static void addItem(Item item)
     {
     	// If the item doesn't exist in itemMap
     	// Add it
