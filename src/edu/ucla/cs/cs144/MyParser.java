@@ -63,11 +63,11 @@ class MyParser {
 	"Notation",
     };
     
-    LinkedHashMap<Integer, Item> itemMap;
-    LinkedHashMap<Integer, User> userMap;
-    LinkedHashMap<Integer, String> categoryIDMap;
-    LinkedHashMap<String, Integer> categoryStringMap;
-    ArrayList<Bid> bids;
+    static LinkedHashMap<Integer, Item> itemMap;
+    static LinkedHashMap<Integer, User> userMap;
+    static LinkedHashMap<Integer, String> categoryIDMap;
+    static LinkedHashMap<String, Integer> categoryStringMap;
+    static ArrayList<Bid> bids;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -336,6 +336,13 @@ class MyParser {
             System.out.println("parser was unable to be configured");
             System.exit(2);
         }
+        
+        /* Initialize containers */
+        itemMap = new LinkedHashMap<Integer, Item>();
+        userMap = new LinkedHashMap<Integer, User>();
+        categoryIDMap = new LinkedHashMap<Integer, String>();
+        categoryStringMap = new LinkedHashMap<String, Integer>();
+        bids = new ArrayList<Bid>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
