@@ -69,6 +69,8 @@ class MyParser {
     static LinkedHashMap<String, Integer> categoryStringMap;
     static ArrayList<Bid> bidsArray;
     
+    static int currentCategoryID;
+    
     static class MyErrorHandler implements ErrorHandler {
         
         public void warning(SAXParseException exception)
@@ -241,8 +243,7 @@ class MyParser {
     	if(categoryElements.length > 0)
     	{
     		// Get an array of the equivalent category ID's
-    		int categoryIDs[] = getCategoryIDs(categoryElements);
-    		item.categoryIDs = categoryIDs;
+    		item.categoryIDs = getCategoryIDs(categoryElements);
     	}
 		
 		// Process Bids
@@ -342,19 +343,37 @@ class MyParser {
     	return user;
     }
     
-    static int[] getCategoryIDs(Element[] categoryElements)
+    static ArrayList<Integer> getCategoryIDs(Element[] categoryElements)
     {
     	// Create a return array
-    	int categoryIDs[] = {0, 1, 2, 3};
+    	ArrayList<Integer> categoryIDs = new ArrayList<Integer>();
     	
     	// Process each Category string
+    	for(int i=0; i < categoryElements.length; i ++)
+    	{
+    		String categoryName = getElementText(categoryElements[i]);
+    		
     		// Check for category in string->id map
     		// If it exists
+    		if(categoryStringMap.containsKey(categoryName))
+    		{
     			// Add it to the return array
+    			categoryIDs.add(categoryStringMap.get(categoryName));
+    		}
     		// If it doesn't
-    			// Create a new id (increment) 
+    		else
+    		{
+    			// Create a new id (increment)
+    			int categoryID = currentCategoryID++;
+    			
     			// Add  pair to string->id, id->string maps
+    			categoryStringMap.put(categoryName, categoryID);
+    			categoryIDMap.put(categoryID, categoryName);
+    			
     			// Add new id to return array
+    			categoryIDs.add(categoryID);
+    		}
+    	}
     	
     	// Return the array
     	return categoryIDs;
@@ -429,6 +448,8 @@ class MyParser {
         categoryIDMap = new LinkedHashMap<Integer, String>();
         categoryStringMap = new LinkedHashMap<String, Integer>();
         bidsArray = new ArrayList<Bid>();
+        
+        currentCategoryID = 0;
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
