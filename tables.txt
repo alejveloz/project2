@@ -1,8 +1,8 @@
 Tables
 	
 User
-	UserID [int]
-	Rating [int?]
+	UserID [varchar]
+	Rating [int]
 	Location [varchar]
 	Country [varchar]
 	
@@ -31,17 +31,16 @@ Item
 
 
 Category
-	CategoryID [int] // Added for key efficiency. int > varchar (accord. piazza Q)
-	Name [varchar]
+	CategoryName [varchar]
 	
-	Key: CategoryID
+	Key: CategoryName
 	Dependencies:
-		CategoryID -> Name
+		None
 	
 
 ItemSeller
 	ItemID [int]
-	UserID [int]
+	UserID [varchar]
 	
 	Key: ItemID
 	Dependencies:
@@ -50,9 +49,9 @@ ItemSeller
 
 ItemCategory
 	ItemID [int]
-	CategoryID [int]
+	CategoryName [varchar]
 	
-	Key: ItemId, CategoryID
+	Key: ItemId, CategoryName
 	Dependencies
 		None
 

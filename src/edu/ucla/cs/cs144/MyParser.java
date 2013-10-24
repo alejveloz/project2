@@ -62,14 +62,9 @@ class MyParser {
 	"DocFragment",
 	"Notation",
     };
-    
-    static LinkedHashMap<Integer, Item> itemMap;
-    static LinkedHashMap<String, User> userMap;
-    static LinkedHashMap<Integer, String> categoryIDMap;
-    static LinkedHashMap<String, Integer> categoryStringMap;
-    static ArrayList<Bid> bidsArray;
-    
-    static int currentCategoryID;
+
+    static ArrayList<String> userIDArray;
+    static ArrayList<String> categoryNameArray;
     
     static class MyErrorHandler implements ErrorHandler {
         
@@ -201,7 +196,7 @@ class MyParser {
 			Item currentItem = parseItem(items[i]);
 			
 			// Add the resulting item to items[]
-			addItem(currentItem);
+			writeItem(currentItem);
         }
         
         /**************************************************************/
@@ -235,15 +230,29 @@ class MyParser {
     	user.location = location;
     	user.country = country;
     	
-    	// Add the user and account for conflicts
-    	addUser(user);
+    	// Write the user
+    	if(!userIDArray.contains(user.userID))
+    	{
+    		writeUser(user);
+    	}
+    	
+    	// Write the relationship between the user and the item
+    	writeItemSeller(item.itemID, user.userID);
 		
     	// Create an array of category strings by parsing the "Category"s
     	Element[] categoryElements = getElementsByTagNameNR(itemElement, "Category");
-    	if(categoryElements.length > 0)
+    	for(int i=0; i < categoryElements.length; i++)
     	{
-    		// Get an array of the equivalent category ID's
-    		item.categoryIDs = getCategoryIDs(categoryElements);
+    		String categoryName = getElementText(categoryElements[i]);
+    		
+    		// Write this category if it doesn't exist yet
+    		if(!categoryNameArray.contains(categoryName))
+    		{
+    			writeCategory(categoryName);
+    		}
+    		
+    		// Write the relationship between this category and item
+    		writeItemCategory(item.itemID, categoryName);
     	}
 		
 		// Process Bids
@@ -254,14 +263,12 @@ class MyParser {
     	{
     		ArrayList<Bid> bids = parseBids(bidElements);
     		
-    		// For each big, update it's ItemID
+    		// For each big, update it's ItemID and write to file
     		for(int i=0; i < bids.size(); i++)
     		{
     			bids.get(i).itemID = item.itemID;
+    			writeBid(bids.get(i));
     		}
-    		
-    		// Add the found bids to the global bid ArrayList
-    		bidsArray.addAll(bids);
     	}
     	
     	return item;
@@ -317,10 +324,10 @@ class MyParser {
     	User user = parseBidder(bidderElement);
     	
     	// Add the user and account for conflicts
-    	addUser(user);
-    			
-    	// Set the remaining fields of the Bid object
-    	// Set the Bid item's "userID"
+    	if(!userIDArray.contains(user.userID))
+    	{
+    		writeUser(user);
+    	}
     	
     	return bid;
     }
@@ -342,81 +349,41 @@ class MyParser {
     	// Return the User object
     	return user;
     }
-    
-    static ArrayList<Integer> getCategoryIDs(Element[] categoryElements)
+
+    static void writeItem(Item item)
     {
-    	// Create a return array
-    	ArrayList<Integer> categoryIDs = new ArrayList<Integer>();
-    	
-    	// Process each Category string
-    	for(int i=0; i < categoryElements.length; i ++)
-    	{
-    		String categoryName = getElementText(categoryElements[i]);
-    		
-    		// Check for category in string->id map
-    		// If it exists
-    		if(categoryStringMap.containsKey(categoryName))
-    		{
-    			// Add it to the return array
-    			categoryIDs.add(categoryStringMap.get(categoryName));
-    		}
-    		// If it doesn't
-    		else
-    		{
-    			// Create a new id (increment)
-    			int categoryID = currentCategoryID++;
-    			
-    			// Add  pair to string->id, id->string maps
-    			categoryStringMap.put(categoryName, categoryID);
-    			categoryIDMap.put(categoryID, categoryName);
-    			
-    			// Add new id to return array
-    			categoryIDs.add(categoryID);
-    		}
-    	}
-    	
-    	// Return the array
-    	return categoryIDs;
+    	// TODO:
+    	return;
     }
     
-    static void addItem(Item item)
+    static void writeUser(User user)
     {
-    	// If the item doesn't exist in itemMap, add it
-    	if(!itemMap.containsKey(item.itemID))
-    		itemMap.put(item.itemID, item);
+    	// TODO:
+    	return;
     }
     
-    static void addUser(User user)
+    static void writeItemSeller(int itemID, String userID)
     {
-    	// If the user doesn't exist in userMap
-    	if(!userMap.containsKey(user.userID))
-    	{
-    		// Add them
-    		userMap.put(user.userID, user);
-    	}
-    	// If the user does exist in userMap
-    	else
-    	{
-    		// Grab the existing User
-    		User existingUser = userMap.get(user.userID);
-    		
-    		// Merge the two Users to create a new user
-    		User newUser = mergeUsers(existingUser, user);
-    		
-    		// Add the new users
-    		userMap.put(newUser.userID, newUser);
-    	}
-    		
+    	// TODO:
+    	return;
     }
     
-    static User mergeUsers(User user1, User user2)
+    static void writeBid(Bid bid)
     {
-    	User newUser = new User();
-    	
-    	// Compare field by field
-    	// Update first User to gain any missing attributes
-    	// Print any conflicts (should not occur)
-    	return newUser;
+    	// TODO:
+    	return;
+    }
+    
+    static void writeCategory(String categoryName)
+    {
+    	// TODO:
+    	return;
+    }
+    
+    static void writeItemCategory(int itemID, String categoryName)
+    {
+    	// TODO:
+    	return;
     }
     
     public static void main (String[] args) {
@@ -443,13 +410,8 @@ class MyParser {
         }
         
         /* Initialize containers */
-        itemMap = new LinkedHashMap<Integer, Item>();
-        userMap = new LinkedHashMap<String, User>();
-        categoryIDMap = new LinkedHashMap<Integer, String>();
-        categoryStringMap = new LinkedHashMap<String, Integer>();
-        bidsArray = new ArrayList<Bid>();
-        
-        currentCategoryID = 0;
+        userIDArray = new ArrayList<String>();
+        categoryNameArray = new ArrayList<String>();
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {

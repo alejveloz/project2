@@ -14,7 +14,6 @@ public class Item {
 	int numBids;
 	String currentBidAmount; // Consider converting to different representation 
 	String userID;  //for database purposes
-	ArrayList<Integer> categoryIDs; //for database purposes
 	
 	Item()
 	{
@@ -28,6 +27,5 @@ public class Item {
 		numBids = -1;
 		currentBidAmount = null;
 		userID = null;
-		categoryIDs = new ArrayList<Integer>();
 	}
 }
