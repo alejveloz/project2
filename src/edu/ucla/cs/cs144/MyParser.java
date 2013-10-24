@@ -339,12 +339,18 @@ class MyParser {
     	
     	// Grab the "userID" and set it
     	user.userID = bidderElement.getAttribute("UserID");
+    	System.out.println(user.userID);
     	
     	// Grab the "rating" and set it
     	user.rating = Integer.parseInt(bidderElement.getAttribute("Rating"));
  
-    	user.location = getElementText(getElementByTagNameNR(bidderElement, "Location"));
-    	user.country = getElementText(getElementByTagNameNR(bidderElement, "Country"));
+    	Element locationElement = getElementByTagNameNR(bidderElement, "Location");
+    	if(locationElement != null)
+    		user.location = getElementText(getElementByTagNameNR(bidderElement, "Location"));
+
+    	Element countryElement = getElementByTagNameNR(bidderElement, "Country");
+    	if(countryElement != null)
+    		user.country = getElementText(countryElement);
     	
     	// Return the User object
     	return user;
