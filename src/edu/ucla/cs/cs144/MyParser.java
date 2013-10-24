@@ -303,8 +303,9 @@ class MyParser {
     
     static void addItem(Item item)
     {
-    	// If the item doesn't exist in itemMap
-    	// Add it
+    	// If the item doesn't exist in itemMap, add it
+    	if(!itemMap.containsKey(item.itemID))
+    		itemMap.put(item.itemID, item);
     }
     
     static void addUser()
