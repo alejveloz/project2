@@ -2,14 +2,14 @@ CREATE TABLE Item(id int PRIMARY KEY,
                   name varchar(100) NOT NULL,
                   buy_price decimal(8,2),
                   first_bid decimal(8,2) NOT NULL,
-                  started date NOT NULL,
-                  ends date NOT NULL,
+                  started timestamp NOT NULL,
+                  ends timestamp NOT NULL,
                   description varchar(4000) NOT NULL,
                   number_of_bids int NOT NULL,
                   currently decimal(8,2) NOT_NULL)
                   ENGINE=INNODB;
 
-10204, "a used car", 100.00, 50.00, ???, ???, "car's description", 2,79.00
+10204, "a used car", 100.00, 50.00, '1970-01-01 00:00:01', '1970-01-01 00:00:01', "car's description", 2,79.00
 
 CREATE TABLE User(id varchar(50) PRIMARY KEY,
                   rating int NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE Category(name varchar(30))ENGINE=INNODB;
 "automobile"
 
 CREATE TABLE Bid(iid int,
-                 time date,
+                 time timestamp,
                  uid varchar(50),
                  amount decimal(8,2),
                  PRIMARY KEY (iid, time)
@@ -33,7 +33,7 @@ CREATE TABLE Bid(iid int,
                  FOREIGN KEY(uid) references User(id))
                  ENGINE=INNODB;
 
-10204, ???, "the buyer", 79.00
+10204, '1970-01-01 00:00:01', "the buyer", 79.00
 
 CREATE TABLE ItemSeller(iid int PRIMARY KEY,
                         uid varchar(5),
