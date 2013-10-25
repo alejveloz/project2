@@ -67,6 +67,13 @@ class MyParser {
     static HashSet<String> writtenCategoryNames;
     static LinkedHashMap<String, User> incompleteUsers;
     
+    static PrintWriter itemWriter;
+    static PrintWriter userWriter;
+    static PrintWriter categoryWriter;
+    static PrintWriter bidWriter;
+    static PrintWriter itemSellerWriter;
+    static PrintWriter itemCategoryWriter;
+    
     static class MyErrorHandler implements ErrorHandler {
         
         public void warning(SAXParseException exception)
@@ -363,6 +370,7 @@ class MyParser {
     static void writeItem(Item item)
     {
     	// TODO:
+    	itemWriter.println("");
     	return;
     }
     
@@ -394,7 +402,9 @@ class MyParser {
     static void writeUser(User user)
     {
     	// TODO:
-    	
+
+	    userWriter.println("");
+	    
     	writtenUserIDs.add(user.userID);
     	return;
     }
@@ -402,6 +412,7 @@ class MyParser {
     static void writeIncompleteUser(User user)
     {
     	// TODO:
+    	
     	
     	incompleteUsers.remove(user.userID);
     	writtenUserIDs.add(user.userID);
@@ -411,19 +422,24 @@ class MyParser {
     static void writeItemSeller(int itemID, String userID)
     {
     	// TODO:
+
+	    itemSellerWriter.println("");
     	return;
     }
     
     static void writeBid(Bid bid)
     {
     	// TODO:
+
+	    bidWriter.println("");
     	return;
     }
     
     static void writeCategory(String categoryName)
     {
     	// TODO:
-    	
+
+	    categoryWriter.println("");
     	writtenCategoryNames.add(categoryName);
     	return;
     }
@@ -431,6 +447,7 @@ class MyParser {
     static void writeItemCategory(int itemID, String categoryName)
     {
     	// TODO:
+	    itemCategoryWriter.println("");
     	return;
     }
     
@@ -461,6 +478,24 @@ class MyParser {
         writtenUserIDs = new HashSet<String>();
         writtenCategoryNames = new HashSet<String>();
         incompleteUsers = new LinkedHashMap<String, User>();
+        
+        /* Create and open all files for writing */
+        try {
+			itemWriter = new PrintWriter("item.csv", "UTF-8");
+		    userWriter = new PrintWriter("user.csv", "UTF-8");
+		    categoryWriter = new PrintWriter("category.csv", "UTF-8");
+		    bidWriter = new PrintWriter("bid.csv", "UTF-8");
+		    itemSellerWriter = new PrintWriter("itemseller.csv", "UTF-8");
+		    itemCategoryWriter = new PrintWriter("itemcategory.csv", "UTF-8");
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			System.out.println("Unable to create csv file");
+			System.exit(2);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			System.out.println("Unsupported encoding");
+			System.exit(2);
+		}
         
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
