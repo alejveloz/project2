@@ -1,18 +1,5 @@
 Tables
 	
-User
-	UserID [varchar]
-	Rating [int]
-	Location [varchar]
-	Country [varchar]
-	
-	Key: UserID
-	Dependencies:
-		UserID -> Rating, Location, Country
-		Location -> Country 
-			(this is technically a dependency, but I think we can ignore it,
-			we don't wanna break it into location tables)
-	
 	
 Item
 	ItemID [int]
@@ -29,6 +16,19 @@ Item
 	Dependencies:
 		ItemID -> Name, Buy Price, First Bid Minimum, Started, Ends, Description, Number of Bids, Current Bid ID
 
+
+User
+	UserID [varchar]
+	Rating [int]
+	Location [varchar]
+	Country [varchar]
+	
+	Key: UserID
+	Dependencies:
+		UserID -> Rating, Location, Country
+		Location -> Country 
+			(this is technically a dependency, but I think we can ignore it,
+			we don't wanna break it into location tables)
 
 Category
 	CategoryName [varchar]
