@@ -1,5 +1,4 @@
 package edu.ucla.cs.cs144;
-import java.util.ArrayList;
 
 /** Class to represent items in memory while parsing **/
 public class Item {

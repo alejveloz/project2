@@ -22,7 +22,7 @@ Item
 	Started [date]
 	Ends [date]
 	Description [varchar]
-	Number of Bids [money int] // Keep in favor of simpler database queries
+	Number of Bids [int] // Keep in favor of simpler database queries
 	Current bid amount [money int] // Keep in favor of simpler database queries
 	
 	Key: ItemID
@@ -65,6 +65,4 @@ Bid
 	Key: ItemID, Time
 	Dependencies:
 		ItemID, Time -> UserID, Amount
-		UserID, Time -> ItemID, Amount
-		[piazza answers indicate both can be keys, idk which to use]
 
