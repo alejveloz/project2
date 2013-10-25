@@ -1,12 +1,12 @@
 CREATE TABLE Item(id int PRIMARY KEY, 
                   name varchar(100) NOT NULL,
-                  buy_price double,
-                  first_bid double NOT NULL,
+                  buy_price decimal(8,2),
+                  first_bid decimal(8,2) NOT NULL,
                   started date NOT NULL,
                   ends date NOT NULL,
                   description varchar(4000) NOT NULL,
                   number_of_bids int NOT NULL,
-                  currently double NOT_NULL)
+                  currently decimal(8,2) NOT_NULL)
                   ENGINE=INNODB;
 
 CREATE TABLE User(id varchar(50) PRIMARY KEY,
@@ -20,7 +20,7 @@ CREATE TABLE Category(name varchar(30))ENGINE=INNODB;
 CREATE TABLE Bid(iid int,
                  time date,
                  uid varchar(50),
-                 amount double,
+                 amount decimal(8,2),
                  PRIMARY KEY (iid, time)
                  FOREIGN KEY(iid) references Item(id),
                  FOREIGN KEY(uid) references User(id))
