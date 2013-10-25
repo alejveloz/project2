@@ -9,7 +9,7 @@ CREATE TABLE Item(id int PRIMARY KEY,
                   currently decimal(8,2) NOT_NULL)
                   ENGINE=INNODB;
 
-10204, "a used car", 100.00, 50.00, '1970-01-01 00:00:01', '1970-01-01 00:00:01', "car's description", 2,79.00
+10204,"a used car",100.00,50.00,'1970-01-01 00:00:01','1970-01-01 00:00:01',"car's description",2,79.00
 
 CREATE TABLE User(id varchar(50) PRIMARY KEY,
                   rating int NOT NULL,
@@ -17,8 +17,8 @@ CREATE TABLE User(id varchar(50) PRIMARY KEY,
                   country varchar(50)
                   ENGINE=INNODB;
 
-"the seller", 499, "westwood", "US"
-"the buyer", 200, \N, "US"
+"the seller",499,"westwood","US"
+"the buyer",200,\N,"US"
 
 CREATE TABLE Category(name varchar(30))ENGINE=INNODB;
 
@@ -33,7 +33,7 @@ CREATE TABLE Bid(iid int,
                  FOREIGN KEY(uid) references User(id))
                  ENGINE=INNODB;
 
-10204, '1970-01-01 00:00:01', "the buyer", 79.00
+10204,'1970-01-01 00:00:01',"the buyer",79.00
 
 CREATE TABLE ItemSeller(iid int PRIMARY KEY,
                         uid varchar(5),
@@ -41,7 +41,7 @@ CREATE TABLE ItemSeller(iid int PRIMARY KEY,
                         FOREIGN KEY(uid) references User(id))
                         ENGINE=INNODB;
 
-10204, "the seller"
+10204,"the seller"
 
 CREATE TABLE ItemCategory(iid int,
                           category varchar(30),
@@ -49,4 +49,4 @@ CREATE TABLE ItemCategory(iid int,
                           FOREIGN KEY(category references Category(name))
                           ENGINE=INNODB;
 
-1024, "automobile"
+1024,"automobile"
