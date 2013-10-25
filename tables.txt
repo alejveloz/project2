@@ -16,7 +16,6 @@ Item
 	Dependencies:
 		ItemID -> Name, Buy Price, First Bid Minimum, Started, Ends, Description, Number of Bids, Current Bid ID
 
-
 User
 	UserID [varchar]
 	Rating [int]
@@ -26,9 +25,6 @@ User
 	Key: UserID
 	Dependencies:
 		UserID -> Rating, Location, Country
-		Location -> Country 
-			(this is technically a dependency, but I think we can ignore it,
-			we don't wanna break it into location tables)
 
 Category
 	CategoryName [varchar]
@@ -36,7 +32,16 @@ Category
 	Key: CategoryName
 	Dependencies:
 		None
+		
+Bid
+	ItemID [int]
+	Time [date]
+	UserID [varchar]
+	Amount [money int]
 	
+	Key: ItemID, Time
+	Dependencies:
+		ItemID, Time -> UserID, Amount
 
 ItemSeller
 	ItemID [int]
@@ -45,7 +50,6 @@ ItemSeller
 	Key: ItemID
 	Dependencies:
 		ItemID -> UserID
-
 
 ItemCategory
 	ItemID [int]
@@ -56,13 +60,4 @@ ItemCategory
 		None
 
 
-Bid
-	ItemID [int]
-	Time [date]
-	UserID [int]
-	Amount [money int]
-	
-	Key: ItemID, Time
-	Dependencies:
-		ItemID, Time -> UserID, Amount
 
