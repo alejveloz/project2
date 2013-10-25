@@ -18,7 +18,7 @@ CREATE TABLE User(id varchar(50) PRIMARY KEY,
                   ENGINE=INNODB;
 
 "the seller", 499, "westwood", "US"
-"the buyer", 200, "santa monica", "US"
+"the buyer", 200, \N, "US"
 
 CREATE TABLE Category(name varchar(30))ENGINE=INNODB;
 
