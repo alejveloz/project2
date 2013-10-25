@@ -1,0 +1,1 @@
+SELECT name FROM Actors WHERE movie = 'Die Another Day';
