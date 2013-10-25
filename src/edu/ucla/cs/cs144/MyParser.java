@@ -67,6 +67,8 @@ class MyParser {
     static HashSet<String> writtenCategoryNames;
     static LinkedHashMap<String, User> incompleteUsers;
     
+    static SimpleDateFormat javaFormat;
+    
     static PrintWriter itemWriter;
     static PrintWriter userWriter;
     static PrintWriter categoryWriter;
@@ -228,9 +230,12 @@ class MyParser {
     	item.firstMinimumBid = strip(getElementText(getElementByTagNameNR(itemElement, "First_Bid")));
     	item.numBids = Integer.parseInt(getElementText(getElementByTagNameNR(itemElement, "Number_of_Bids")));
     	item.currentBidAmount = strip(getElementText(getElementByTagNameNR(itemElement, "Currently")));
-    	item.started = getElementText(getElementByTagNameNR(itemElement, "Started"));
-    	item.ends = getElementText(getElementByTagNameNR(itemElement, "Ends"));
-    	item.description = getElementText(getElementByTagNameNR(itemElement, "Description"));
+    	item.started = createJavaDate(getElementText(getElementByTagNameNR(itemElement, "Started")));
+    	item.ends = createJavaDate(getElementText(getElementByTagNameNR(itemElement, "Ends")));
+    	String description = getElementText(getElementByTagNameNR(itemElement, "Description"));
+    	if(description.length() > 4000)
+    		description = description.substring(0, 3999);
+    	item.description = description;
     	Element buyPriceElement = getElementByTagNameNR(itemElement, "Buy_Price");
     	if(buyPriceElement != null)
     	{
@@ -324,7 +329,7 @@ class MyParser {
     	Bid bid = new Bid();
     	
     	// Grab the "time" and set it
-    	bid.time = getElementText(getElementByTagNameNR(bidElement, "Time"));
+    	bid.time = createJavaDate(getElementText(getElementByTagNameNR(bidElement, "Time")));
     	
     	// Grab the "amount" and set it
     	bid.amount = strip(getElementText(getElementByTagNameNR(bidElement, "Amount")));
@@ -334,6 +339,7 @@ class MyParser {
     	
     	// Create a user from the Bidder element
     	User user = parseBidder(bidderElement);
+    	bid.userID = user.userID;
     	
     	// Add the user and account for conflicts
     	if(!writtenUserIDs.contains(user.userID))
@@ -369,8 +375,7 @@ class MyParser {
 
     static void writeItem(Item item)
     {
-    	// TODO:
-    	itemWriter.println("");
+    	itemWriter.println(item.loadString());
     	return;
     }
     
@@ -401,55 +406,62 @@ class MyParser {
     
     static void writeUser(User user)
     {
-    	// TODO:
-
-	    userWriter.println("");
-	    
+	    userWriter.println(user.loadString());
     	writtenUserIDs.add(user.userID);
     	return;
     }
     
     static void writeIncompleteUser(User user)
     {
-    	// TODO:
-    	
-    	
+    	userWriter.println(user.loadString());
     	incompleteUsers.remove(user.userID);
     	writtenUserIDs.add(user.userID);
+    	return;
+    }
+
+    static void writeCategory(String categoryName)
+    {
+	    categoryWriter.println("\"" + customSQLEscaped(categoryName) + "\"");
+    	writtenCategoryNames.add(categoryName);
+    	return;
+    }
+
+    static void writeBid(Bid bid)
+    {
+	    bidWriter.println(bid.loadString());
     	return;
     }
     
     static void writeItemSeller(int itemID, String userID)
     {
-    	// TODO:
-
-	    itemSellerWriter.println("");
-    	return;
-    }
-    
-    static void writeBid(Bid bid)
-    {
-    	// TODO:
-
-	    bidWriter.println("");
-    	return;
-    }
-    
-    static void writeCategory(String categoryName)
-    {
-    	// TODO:
-
-	    categoryWriter.println("");
-    	writtenCategoryNames.add(categoryName);
+	    itemSellerWriter.println(itemID + "," + "\"" + customSQLEscaped(userID) + "\"");
     	return;
     }
     
     static void writeItemCategory(int itemID, String categoryName)
     {
-    	// TODO:
-	    itemCategoryWriter.println("");
+	    itemCategoryWriter.println(itemID + "," + "\"" + customSQLEscaped(categoryName) + "\"");
     	return;
     }
+    
+    static Date createJavaDate(String dateString)
+    {
+    	Date parsed = new Date();
+    	
+    	try {
+            parsed = javaFormat.parse(dateString);
+        }
+        catch(ParseException pe) {
+            System.out.println("ERROR: Cannot parse \"" + dateString + "\"");
+        }
+    	
+    	return parsed;
+    }
+    
+    static public String customSQLEscaped(String string)
+	{
+		return string.replace(",", "\\,").replace("\"", "\\\"");
+	}
     
     public static void main (String[] args) {
         if (args.length == 0) {
@@ -479,6 +491,9 @@ class MyParser {
         writtenCategoryNames = new HashSet<String>();
         incompleteUsers = new LinkedHashMap<String, User>();
         
+        /* Initialize date format */
+    	javaFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+        
         /* Create and open all files for writing */
         try {
 			itemWriter = new PrintWriter("item.csv", "UTF-8");
@@ -502,5 +517,13 @@ class MyParser {
             File currentFile = new File(args[i]);
             processFile(currentFile);
         }
+        
+        /* Close all files */
+        itemWriter.close();
+        userWriter.close();
+        categoryWriter.close();
+        bidWriter.close();
+        itemSellerWriter.close();
+        itemCategoryWriter.close();
     }
 }
