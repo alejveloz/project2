@@ -496,12 +496,14 @@ class MyParser {
         
         /* Create and open all files for writing */
         try {
-			itemWriter = new PrintWriter("item.csv", "UTF-8");
-		    userWriter = new PrintWriter("user.csv", "UTF-8");
-		    categoryWriter = new PrintWriter("category.csv", "UTF-8");
-		    bidWriter = new PrintWriter("bid.csv", "UTF-8");
-		    itemSellerWriter = new PrintWriter("itemseller.csv", "UTF-8");
-		    itemCategoryWriter = new PrintWriter("itemcategory.csv", "UTF-8");
+        	File csvDirectory = new File("csv"); 
+        	csvDirectory.mkdirs();
+			itemWriter = new PrintWriter("csv/item.csv", "UTF-8");
+		    userWriter = new PrintWriter("csv/user.csv", "UTF-8");
+		    categoryWriter = new PrintWriter("csv/category.csv", "UTF-8");
+		    bidWriter = new PrintWriter("csv/bid.csv", "UTF-8");
+		    itemSellerWriter = new PrintWriter("csv/itemseller.csv", "UTF-8");
+		    itemCategoryWriter = new PrintWriter("csv/itemcategory.csv", "UTF-8");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("Unable to create csv file");
