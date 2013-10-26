@@ -27,5 +27,7 @@ where CategoryCount.NumberOfCategories=4;
 select count(distinct User.id) from User, ItemSeller where User.id like ItemSeller.uid and User.rating > 1000;
 
 -- Find the number of users who are both sellers and bidders.
+select count(distinct Bid.uid) from ItemSeller, Bid where ItemSeller.uid like Bid.uid;
+-- 5605 instead of 6717
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
