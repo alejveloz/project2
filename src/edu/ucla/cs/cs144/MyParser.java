@@ -258,10 +258,22 @@ class MyParser {
 		
     	// Create an array of category strings by parsing the "Category"s
     	Element[] categoryElements = getElementsByTagNameNR(itemElement, "Category");
+    	ArrayList<String> uniqueCategoryStrings = new ArrayList<String>();
     	for(int i=0; i < categoryElements.length; i++)
     	{
     		String categoryName = getElementText(categoryElements[i]);
     		
+    		if(!uniqueCategoryStrings.contains(categoryName))
+    		{
+    			uniqueCategoryStrings.add(categoryName);
+    		}
+    	}
+
+    	// Write the unique categories for this item
+    	for(int i=0; i < uniqueCategoryStrings.size(); i++)
+    	{
+    		String categoryName = uniqueCategoryStrings.get(i);
+    	
     		// Write this category if it doesn't exist yet
     		if(!writtenCategoryNames.contains(categoryName))
     		{
